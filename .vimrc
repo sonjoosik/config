@@ -81,7 +81,7 @@ set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 set laststatus=2
 
 " clipboard related
-set clipboard+=unnamedplus
+set clipboard+=unnamed
 
 " copy to attached terminal using the yank(1) script:
 " https://github.com/sunaku/home/blob/master/bin/yank

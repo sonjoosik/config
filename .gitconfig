@@ -1,0 +1,76 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[user]
+	name = jace-son
+	email = jace.son@sendbird.com
+
+[credential]
+	helper = store
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
+  light = false
+
+[merge]
+  conflictstyle = diff3
+
+[color]
+	ui = always
+
+[gpg]
+	program = gpg
+
+[alias]
+  sw = switch
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  dc = diff --cached
+  dis = diff --ignore-space-change
+  lg = log -p
+  gr = log --all --graph --decorate --oneline
+
+  pr  = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+  pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
+
+  cancel-amend = "!f() { git reset --aoft HEAD@{1}; git commit -C HEAD@{1}; }; f"
+
+  fr = "!f() { git fetch origin $1; git rebase -i origin/$1; }; f"
+  po = "!f() { git push origin $(git rev-parse --abbrev-ref HEAD) $@; }; f"
+
+  edit-unmerged = \
+    "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; $EDITOR `f`"
+
+  add-unmerged = \
+    "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+
+  url = "!f() { git remote get-url ${1:-origin}; }; f"
+  origin2upstream = "!git remote add upstream $(git remote get-url origin)"
+  user2remote = "!f() { git remote set-url ${1:-origin} $(git remote get-url ${1:-origin} | sed \"s|https://|https://$(git config user.name)@|g\"); }; f"
+	d = difftool
+	root = rev-parse --show-toplevel
+
+[diff]
+	tool = delta
+  colorMoved = default
+
+[difftool]
+	prompt = false
+
